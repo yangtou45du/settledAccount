@@ -1,5 +1,6 @@
 #!/usr/bin/python
-# -*- coding: utf-8 -*-
+# -*- coding: cp936 -*-
+# -*- coding: encoding -*-
 import sys
 import time
 
@@ -9,41 +10,42 @@ from termcolor import *
 from tools.write_log import write_log
 from termcolor import *
 import sys
+
 class Driven:
-    #å®ç°æ•°æ®é©±åŠ¨
+    #ÊµÏÖÊı¾İÇı¶¯
     def driven_it(self):
-        ex=Excel()
-        table=ex.read_it("C:\\Users\\Administrator\\PycharmProjects\\aapium\\tools\\testData.xlsx")
-        i=1
-        for rownum in range(1,table.nrows):
-            print "\n##### start Test Case"+str(i)+"  ####"
-            '''è·å–è¡Œæ•°æ®ä¸ºåˆ—è¡¨å½¢å¼'''
-            list=table.row_values(rownum)
-            print(list)
-            #åŠ¨æ€å¯¼å…¥åŒ…
-            __import__('testCase.'+list[1])#import testCase.Login
-            #  #å¯¼å…¥æ¨¡å—
-            module=sys.modules['testCase.'+list[1]]#change Login()
-            # #æ ¹æ®list[0]è·å–ç±»
-            c=getattr(module,list[1])#c=Login()
-            # #å®ä¾‹åŒ–å¯¹è±¡
-            obj=c()#obi=Login()
-            # #æ ¹æ®list[1]è·å–æ–¹æ³•
-            mtd=getattr(obj,list[2])#mtd=assert_suc
+        ex = Excel()
+        table = ex.read_it("C:\\Users\\Lenovo\\PycharmProjects\\settledAccount\\tools\\testData.xlsx")
+        i = 1
+        for rownum in range(1, table.nrows):
+            print "\n##### start Test Case" + str(i) + "  ####"
+            '''»ñÈ¡ĞĞÊı¾İÎªÁĞ±íĞÎÊ½'''
+            list = table.row_values(rownum)
+            #print(list)
+            # ¶¯Ì¬µ¼Èë°ü
+            __import__('testCase.' + list[1])  # import assertResult
+            #  #µ¼ÈëÄ£¿é
+            module = sys.modules['testCase.' + list[1]]  # assertResult()
+            # #¸ù¾İlist[1]»ñÈ¡Àà
+            c = getattr(module, list[1])  # c=assertResult()
+            # #ÊµÀı»¯¶ÔÏó
+            obj = c()  # obi=assertResult()
+            # #¸ù¾İlist[2]»ñÈ¡·½·¨
+            mtd = getattr(obj, list[2])  # mtd=assert_result
             try:
-                dict=get_dc(list[3])
-                print dict
-                if list[4]=="":
-                    mtd(dict)
-                else:
-                    mtd(dict,list[4])
+                  dict = {}
+                  dict["loanNo"] = list[3]
+                  print dict
+                  exce=list[4].encode("gbk")
+                  mtd(dict, exce)
             except Exception as e:
                 nowTime = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time()))
-                write_log(colored((nowTime+" error :"+str(e)+"\n"), "red"))
-                print colored((nowTime+str(e)), "red")
+                write_log(colored((nowTime + " error :" + str(e) +"\n"), "red"))
+
+                print colored((nowTime + str(e)), "red")
                 sys.exit()
             print("##### stop Test Case"+str(i)+"  ####\n")
-            time.sleep(3)
+            
             i+=1
 
 dr=Driven()
